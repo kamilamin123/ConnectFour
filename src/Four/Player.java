@@ -2,7 +2,7 @@ package Four;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-class Player {
+public class Player {
 
 	private String name;
 	private String playerNumber;
@@ -33,8 +33,8 @@ class Player {
 			System.out.print(this.name+"you didnt enter number in number format please enter your column number move: ");
 			move =scanner.nextInt();
 		}
-		scanner.close();
-		return move ;
+		
+		return move-1 ;
 	}
 
 

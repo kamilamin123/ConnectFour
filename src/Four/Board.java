@@ -1,9 +1,9 @@
 package Four;
 import java.util.Scanner;
-import java.util.Arrays;
+
 import java.util.InputMismatchException;
 
-class Board {
+public class Board {
 
 	String[][] board;
 	private Scanner scan = new Scanner(System.in); 
@@ -31,7 +31,12 @@ class Board {
 			columns = scan.nextInt();
 		}
 		board = new String[rows][columns];
-		Arrays.fill(board,"-");
+		for(int i = 0; i < board.length; i++)
+		{
+			for(int j = 0; j < board[0].length; j++)
+			{
+				board[i][j]="-";
+			}}
 	}
 
 
@@ -66,23 +71,27 @@ class Board {
 	}
 
 
-	public boolean addToken(int colToAddToken, String playerName) throws GameExceptions {
+	public boolean addToken(int colToAddToken, String playerName) throws ColumnFullException, InvalidMoveException {
 		boolean check=false;
 		if (colToAddToken >= board[0].length || colToAddToken<0 ) {
 			check=false;
-			throw new GameExceptions("the column number exceeds the number of columns on the board.");
+			throw new InvalidMoveException("the column number exceeds the number of columns on the board.");
 		}else if (columnFull(colToAddToken)) {
 			check=false;
-			throw new GameExceptions("the selected column is full and cannot accept any more tokens");	
+			throw new ColumnFullException("the selected column is full and cannot accept any more tokens");	
 		}else {
-			for (int row = board.length-1; row <=0 ; row--) {
+			for (int row = board.length-1; row >=0 ; row--) {
 				if (board[row][colToAddToken].equals("-")) {
+					System.out.println("1");
 					board[row][colToAddToken] = playerName;
+					check=true;
+					break;
+					
 				}
 			}
-			check=true;
-		}
-		return check;
+			
+		}return check;
+		
 	}
 
 
@@ -126,7 +135,7 @@ class Board {
 			String previousvaule="";
 			int numberCheck=0;
 			for (int col = 0; col < board[0].length; col++) {
-				if (board[row][col].equals(previousvaule)) { 
+				if (board[row][col].equals(previousvaule)&& !board[row][col].equals("-")) { 
 					numberCheck++;
 					if (numberCheck==3) {
 						return true;
@@ -151,7 +160,7 @@ class Board {
 				int l = j - k; 
 				int mirror = board.length - l;
 				if (mirror >= 0 && mirror < board.length && k < board[0].length) {
-					if (board[mirror][k].equals(previousValue)) { 
+					if (board[mirror][k].equals(previousValue)&& !board[mirror][k].equals("-")) { 
 						numberCheck++;
 						if (numberCheck==3) {
 							return true;
@@ -176,7 +185,7 @@ class Board {
 			for (int j = 0 ; j <= k ; j++ ) {
 				int i = k - j;
 				if (i < board.length && j < board[0].length) {
-					if (board[i][j].equals(previousValue)) { 
+					if (board[i][j].equals(previousValue)&& !board[i][j].equals("-")) { 
 						numberCheck++;
 						if (numberCheck==3) {
 							return true;

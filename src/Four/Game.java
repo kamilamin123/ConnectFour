@@ -29,6 +29,7 @@ public class Game {
 				break;
 			}
 		}
+		player= new Player[n];
 		scan.nextLine();
 		String name="";
 		Boolean check= false;
@@ -37,7 +38,9 @@ public class Game {
 			System.out.print(" enter the player name it should be unique for player number "+(i+1)+" : ");
 			name = scan.nextLine();
 			for(Object each:player) {
-				if (name.equals(each)) {
+				if (each==null){
+					break;
+				}else if (name.equals(((Player) each).getName())) {
 					check=true;
 					continue;
 				}
@@ -58,9 +61,14 @@ public class Game {
 			int move =currentPlayer.MakeMove();
 			boolean check=false;
 			try {
+				try {
 				check= board.addToken(move, currentPlayer.getName());
+				} catch (InvalidMoveException e){
+					System.out.println(e.getMessage());
+					
+				}
 
-			}catch(GameExceptions e) {
+			}catch(ColumnFullException e) {
 				System.out.println(e.getMessage());
 
 			}
@@ -68,7 +76,7 @@ public class Game {
 				board.printBoard();
 			}
 		} catch (Exception e) {
-			System.out.println("Try again late");
+			System.out.println("Try again late"+e);
 		}
 	}
 	public void play() {
@@ -79,15 +87,17 @@ public class Game {
 		while(noWinner) {
 			if(board.boardFull()) {
 				System.out.println("Board is now full. Game Ends.");
+				break;
 			}else {
 				Player currentPlayer = player[currentPlayerIndex];
-				System.out.println("It is player"+ currentPlayer.getPlayerNumber()+"\'s turn."+currentPlayer.getName() );
+				System.out.println("It is player"+ currentPlayer.getPlayerNumber()+"\'s turn: "+currentPlayer.getName() );
 				playerTurn(currentPlayer);
 				if(board.checkIfPlayerIsTheWinner(currentPlayer.getPlayerNumber())) {
 					printWinner(currentPlayer);
 					noWinner=false;
 				}else {
 					currentPlayerIndex=(currentPlayerIndex+1)%player.length;
+					continue;
 				}
 
 			}
