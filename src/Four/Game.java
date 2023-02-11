@@ -62,7 +62,7 @@ public class Game {
 			boolean check=false;
 			try {
 				try {
-				check= board.addToken(move, currentPlayer.getName());
+				check= board.addToken(move, currentPlayer.getPlayerNumber());
 				} catch (InvalidMoveException e){
 					System.out.println(e.getMessage());
 					
